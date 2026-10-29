@@ -1,10 +1,8 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-let isConnected = false;
-
 async function connectDB() {
-  if (isConnected) {
+  if (mongoose.connection && mongoose.connection.readyState >= 1) {
     return mongoose.connection;
   }
 
@@ -15,7 +13,6 @@ async function connectDB() {
       serverSelectionTimeoutMS: 15000,
       autoIndex: true,
     });
-    isConnected = true;
     console.log(`[Database] MongoDB Connected: ${conn.connection.host}/${conn.connection.name}`);
     return conn.connection;
   } catch (error) {
